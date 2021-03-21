@@ -26,7 +26,7 @@ function RetrieveHistorical(market, cb) {
     pool.query(`
         SELECT DataTime, Value
         FROM HistoricalData
-        WHERE MarketID = ${market}
+        WHERE MarketID = '${market}'
         `,
         (err, res) => {
             if (err) throw err;
