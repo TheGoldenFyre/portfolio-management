@@ -25,7 +25,7 @@ function RetrieveHistorical(market, options, cb) {
     let hd = { market: market }
 
     pool.query(`
-            SET @a=0;
+            SET @a=-1;
             SELECT DataTime, Value
             FROM HistoricalData
             WHERE MarketID = '${market}'
