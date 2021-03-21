@@ -21,6 +21,7 @@ function InsertHistorical(marketTick, cb) {
         })
 }
 
+//TODO: sanitize sql input
 function RetrieveHistorical(market, options, cb) {
     let hd = { market: market }
 
@@ -28,10 +29,10 @@ function RetrieveHistorical(market, options, cb) {
             SET @a=-1;
             SELECT DataTime, Value
             FROM HistoricalData
-            WHERE MarketID = '${market}'
-            ${options.start ? `AND DataTime >= '${options.start}'` : ''}
-            ${options.end ? `AND DataTime <= '${options.end}'` : ''}
-            ${options.res ? `AND (@a := @a + 1) % ${options.res} = 0` : ''};
+            WHERE MarketID = '${pool.escape(market)}'
+            ${options.start ? `AND DataTime >= '${pool.escape(options.start)}'` : ''}
+            ${options.end ? `AND DataTime <= '${pool.escape(options.end)}'` : ''}
+            ${options.res ? `AND (@a := @a + 1) % ${pool.escape(options.res)} = 0` : ''};
             `,
         (err, res) => {
             if (err) throw err;
