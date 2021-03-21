@@ -25,7 +25,7 @@ function GetTick(cb) {
             if (marketTick.market.slice(-4) !== "-EUR") continue
 
             let price = parseFloat(marketTick.price)
-            let d = new Date()
+            let d = new Date().toISOString().slice(0, 19).replace('T', ' ')
             data.push({
                 name: marketTick.market,
                 time: d,
