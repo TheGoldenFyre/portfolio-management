@@ -10,4 +10,11 @@ function UpdateCrypto() {
     })
 }
 
-dbi.RetrieveHistorical("ADA-EUR")
+let express = require('express')
+let app = express()
+
+app.get('/market/:market/', (req, res) => {
+    dbi.RetrieveHistorical(req.params.market, (data) => {
+        res.send(data)
+    })
+})

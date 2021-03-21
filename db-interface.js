@@ -31,10 +31,10 @@ function RetrieveHistorical(market, cb) {
         (err, res) => {
             if (err) throw err;
 
-            console.log(res)
+            hd.data = res
 
             if (typeof cb === "function")
-                cb(marketTick)
+                cb(hd)
         })
 }
 
