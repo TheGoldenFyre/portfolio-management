@@ -8,23 +8,19 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 <body>
-    <label for="start">Starting time</label>
-    <input type="datetime-local" name="start" id="start">
-    <label for="end">Ending time</label>
-    <input type="datetime-local" name="end" id="end">
-    <label for="resolution">Resolution</label>
-    <input type="number" name="resolution" id="resolution">
-    <button onclick="GetData()"></button>
+    <div>
+        <div onclick="HandleButton(this)" class="button button-selected">~</div>
+        <div onclick="HandleButton(this)" class="button">H</div>
+        <div onclick="HandleButton(this)" class="button">D</div>
+        <div onclick="HandleButton(this)" class="button">W</div>
+        <div onclick="HandleButton(this)" class="button">M</div>
+    </div>
 
     <script>
-        function GetData() {
-            let s = $('#start').value
-            let e = $('#end').value
-            let r = $('#resolution').value
-
-            let obj = $.getJSON(`/market/ADA-EUR/?res=${r}&end=${e}&start=${s}`)
+        function HandleButton(obj) {
             console.log(obj)
         }
+        
     </script>
 </body>
 </html>
