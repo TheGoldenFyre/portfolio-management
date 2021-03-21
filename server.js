@@ -21,7 +21,7 @@ function UpdateCrypto() {
 function InsertHD(marketTick, cb) {
     pool.query(`
         INSERT INTO HistoricalData
-        VAlUES (''${marketTick.time}', ${marketTick.name}', '${marketTick.value}')`,
+        VAlUES (''${marketTick.time}', '${marketTick.name}', '${marketTick.value}')`,
         (err, res) => {
             if (err) throw err;
 
