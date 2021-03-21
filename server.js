@@ -18,3 +18,5 @@ app.get('/market/:market/', (req, res) => {
         res.send(data)
     })
 })
+
+app.listen(7000, () => {console.log('Started')})
