@@ -1,0 +1,16 @@
+{
+  "name": "bitvavo-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bitvavo": "^1.2.0",
+    "mysql": "^2.18.1",
+    "node-schedule": "^2.0.0"
+  }
+}
