@@ -13,6 +13,8 @@ const bitvavo = require('bitvavo')().options({
 
 function GetTick(cb) {
     bitvavo.tickerPrice({}, (tickerError, tick) => {
+        if (tickerError) console.log(tickerError)
+
         let data = []
 
         for (let marketTick of tick) {
