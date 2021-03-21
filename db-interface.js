@@ -25,6 +25,8 @@ function InsertHistorical(marketTick, cb) {
 function RetrieveHistorical(market, options, cb) {
     let hd = { market: market }
 
+    console.log(pool.escape(options.res))
+
     pool.query(`
             SET @a=-1;
             SELECT DataTime, Value
