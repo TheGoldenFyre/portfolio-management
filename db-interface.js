@@ -23,23 +23,24 @@ function InsertHistorical(marketTick, cb) {
 function RetrieveHistorical(market, options, cb) {
     let hd = { market: market }
 
-    pool.query(`
-        SET @a=0;
-        SELECT DataTime, Value
-        FROM HistoricalData
-        WHERE MarketID = '${market}'
-        ${options.start ? `AND DataTime >= '${options.start}'` : ''}
-        ${options.end ? `AND DataTime <= '${options.start}'` : ''}
-        ${options.res ? `AND (@a := @a + 1) % ${options.res} = 0` : ''};
-        `,
-        (err, res) => {
-            if (err) throw err;
+    pool.query("SET @a=0;", () => {
+        pool.query(`
+            SELECT DataTime, Value
+            FROM HistoricalData
+            WHERE MarketID = '${market}'
+            ${options.start ? `AND DataTime >= '${options.start}'` : ''}
+            ${options.end ? `AND DataTime <= '${options.start}'` : ''}
+            ${options.res ? `AND (@a := @a + 1) % ${options.res} = 0` : ''};
+            `,
+            (err, res) => {
+                if (err) throw err;
 
-            hd.data = res
+                hd.data = res
 
-            if (typeof cb === "function")
-                cb(hd)
+                if (typeof cb === "function")
+                    cb(hd)
         })
+    })
 }
 
 module.exports = {
