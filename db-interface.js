@@ -4,7 +4,8 @@ var pool = mysql.createPool({
     host: "192.168.2.35",
     user: "crypto",
     password: "CryptoStonks",
-    database: "portfoliotracker"
+    database: "portfoliotracker",
+    multipleStatements: true
 })
 
 //Handles the insertion of historical data into the database
@@ -23,8 +24,8 @@ function InsertHistorical(marketTick, cb) {
 function RetrieveHistorical(market, options, cb) {
     let hd = { market: market }
 
-    pool.query("SET @a=0;", () => {
-        pool.query(`
+    pool.query(`
+            SET @a=0;
             SELECT DataTime, Value
             FROM HistoricalData
             WHERE MarketID = '${market}'
@@ -32,15 +33,14 @@ function RetrieveHistorical(market, options, cb) {
             ${options.end ? `AND DataTime <= '${options.start}'` : ''}
             ${options.res ? `AND (@a := @a + 1) % ${options.res} = 0` : ''};
             `,
-            (err, res) => {
-                if (err) throw err;
+        (err, res) => {
+            if (err) throw err;
 
-                hd.data = res
+            hd.data = res
 
-                if (typeof cb === "function")
-                    cb(hd)
+            if (typeof cb === "function")
+                cb(hd)
         })
-    })
 }
 
 module.exports = {
