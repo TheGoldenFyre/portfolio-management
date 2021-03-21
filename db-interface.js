@@ -29,9 +29,9 @@ function RetrieveHistorical(market, options, cb) {
             SET @a=-1;
             SELECT DataTime, Value
             FROM HistoricalData
-            WHERE MarketID = '${pool.escape(market)}'
-            ${options.start ? `AND DataTime >= '${pool.escape(options.start)}'` : ''}
-            ${options.end ? `AND DataTime <= '${pool.escape(options.end)}'` : ''}
+            WHERE MarketID = ${pool.escape(market)}
+            ${options.start ? `AND DataTime >= ${pool.escape(options.start)}` : ''}
+            ${options.end ? `AND DataTime <= ${pool.escape(options.end)}` : ''}
             ${options.res ? `AND (@a := @a + 1) % ${pool.escape(options.res)} = 0` : ''};
             `,
         (err, res) => {
