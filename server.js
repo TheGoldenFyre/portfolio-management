@@ -25,6 +25,6 @@ function InsertHD(marketTick, cb) {
         (err, res) => {
             if (err) throw err;
 
-            cb(MD)
+            cb(marketTick)
         })
 }

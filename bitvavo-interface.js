@@ -17,8 +17,6 @@ function GetTick(cb) {
 
         let data = []
 
-        console.log(tick)
-
         for (let marketTick of tick) {
 
             //Ignore any markets which aren't represented in euros
