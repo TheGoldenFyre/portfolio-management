@@ -27,7 +27,7 @@ function RetrieveHistorical(market, options, cb) {
         SELECT DataTime, Value
         FROM HistoricalData
         WHERE MarketID = '${market}'
-        ${req.query.start ? ` AND DataTime > ${req.query.start}` : ''}
+        ${options.start ? ` AND DataTime > ${options.start}` : ''}
         `,
         (err, res) => {
             if (err) throw err;
