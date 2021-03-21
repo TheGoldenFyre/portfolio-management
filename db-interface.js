@@ -25,7 +25,7 @@ function RetrieveHistorical(market, options, cb) {
 
     pool.query(`
         SET @rownum;
-        SELECT DataTime, Value
+        SELECT DataTime, Value, @rownum
         FROM HistoricalData
         WHERE MarketID = '${market}'
         ${options.start ? `AND DataTime >= '${options.start}'` : ''}
