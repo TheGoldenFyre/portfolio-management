@@ -12,7 +12,7 @@ var pool = mysql.createPool({
 function InsertHistorical(marketTick, cb) {
     pool.query(`
         INSERT INTO HistoricalData
-        VAlUES ('${marketTick.time}', '${marketTick.name}', '${marketTick.value}')`,
+        VAlUES (${pool.escape(marketTick.time)}, ${pool.escape(marketTick.name)}, ${pool.escape(marketTick.value)})`,
         (err, res) => {
             if (err) throw err;
 

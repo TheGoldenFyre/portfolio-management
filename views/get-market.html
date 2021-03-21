@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get data</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+    <label for="start">Starting time</label>
+    <input type="datetime" name="start" id="start">
+    <label for="end">Ending time</label>
+    <input type="datetime" name="end" id="end">
+    <label for="resolution">Resolution</label>
+    <input type="number" name="resolution" id="resolution">
+    <button onclick="GetData()"></button>
+
+    <script>
+        function GetData() {
+            let s = $('#start').value
+            let e = $('#end').value
+            let r = $('#resolution').value
+
+            let obj = $.getJSON(`/market/ADA-EUR/?res=${r}&end=${e}&start=${s}`)
+            console.log(obj)
+        }
+    </script>
+</body>
+</html>
