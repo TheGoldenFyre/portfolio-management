@@ -14,9 +14,9 @@ let express = require('express')
 let app = express()
 
 app.get('/market/:market/', (req, res) => {
-    dbi.RetrieveHistorical(req.params.market, (data) => {
+    dbi.RetrieveHistorical(req.params.market, req.query, (data) => {
         res.send(data)
     })
 })
 
-app.listen(7000, () => {console.log('Started')})
+app.listen(7000, () => { console.log('Started') })

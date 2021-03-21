@@ -20,13 +20,14 @@ function InsertHistorical(marketTick, cb) {
         })
 }
 
-function RetrieveHistorical(market, cb) {
+function RetrieveHistorical(market, options, cb) {
     let hd = { market: market }
 
     pool.query(`
         SELECT DataTime, Value
         FROM HistoricalData
         WHERE MarketID = '${market}'
+        ${req.query.start ? ` AND DataTime > ${req.query.start}` : ''}
         `,
         (err, res) => {
             if (err) throw err;
