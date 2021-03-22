@@ -18,9 +18,47 @@
 
     <script>
         function HandleButton(obj) {
-            console.log(obj)
+            let res = 1, start = "", end = "";
+
+            switch(obj.firstChild.textContent) {
+                case '~': {
+                    res = 1;
+                    end = new Date()
+                    start = new Date(end.valueOf() - 15 * 60000)
+                    break;
+                }
+                case 'H': {
+                    res = 4;
+                    end = new Date()
+                    start = new Date(end.valueOf() - 60 * 60000)
+                    break;
+                }
+                case 'D': {
+                    res = 60;
+                    end = new Date()
+                    start = new Date(end.valueOf() - 24 * 60 * 60000)
+                    break;
+                }
+                case 'W': {
+                    res = 450;
+                    end = new Date()
+                    start = new Date(end.valueOf() - 7 * 24 * 60 * 60000)
+                    break;
+                }
+                case 'M': {
+                    res = 1500;
+                    end = new Date()
+                    start = new Date(end.valueOf() - 30 * 24 * 60 * 60000)
+                    break;
+                }
+            }
+
+            $.getJSON(`http://portfolio.plopfyre.studio/market/ADA-EUR?res=${res}&start=${start.toDBString()}&end=${end.toDBString()}`, (data) => console.log(data))
         }
         
+        Date.prototype.toDBString = function() {
+            return this.toISOString().slice(0, 19).replace('T', ' ')
+        }
     </script>
 </body>
 </html>

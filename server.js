@@ -13,12 +13,13 @@ function UpdateCrypto() {
 let express = require('express')
 let app = express()
 let path = require('path')
+let cors = require('cors')
 
 app.get('/get-market/', (req, res) => {
     res.sendFile(path.resolve('./views/get-market.html'))
 })
 
-app.get('/market/:market/', (req, res) => {
+app.get('/market/:market/', cors(), (req, res) => {
     dbi.RetrieveHistorical(req.params.market, req.query, (data) => {
         res.send(data)
     })
