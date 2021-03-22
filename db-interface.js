@@ -39,7 +39,7 @@ function RetrieveHistorical(market, options, cb) {
         (err, res) => {
             if (err) throw err;
 
-            hd.data = res
+            hd.data = res[1]
 
             if (typeof cb === "function")
                 cb(hd)
