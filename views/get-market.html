@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Get data</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@svgdotjs/svg.js@3.0/dist/svg.min.js"></script>
 </head>
 <body>
     <div>
@@ -17,6 +18,11 @@
     </div>
 
     <script>
+        var draw = SVG().addTo('body').size(300, 300)
+        
+        var rect = draw.rect(100, 100).attr({ fill: '#f06' })
+
+
         function HandleButton(obj) {
             let res = 1, start = "", end = "";
 
@@ -54,7 +60,6 @@
             }
 
             $.getJSON(`http://portfolio.plopfyre.studio/market/ADA-EUR?res=${res}&start=${start.toDBString()}&end=${end.toDBString()}`, (data) => {
-                console.log(data.data[0])
                 console.log(DateFromSQLString(data.data[0].DataTime))
             })
         }
@@ -64,24 +69,10 @@
         }
 
         function DateFromSQLString (sqlstring){
-            //sqlDate in SQL DATETIME format ("yyyy-mm-dd hh:mm:ss.ms")
-            var sqlDateArr1 = sqlstring.split("-");
-            //format of sqlDateArr1[] = ['yyyy','mm','dd hh:mm:ms']
-            var sYear = sqlDateArr1[0];
-            var sMonth = (Number(sqlDateArr1[1]) - 1).toString();
-            var sqlDateArr2 = sqlDateArr1[2].split(" ");
-            //format of sqlDateArr2[] = ['dd', 'hh:mm:ss.ms']
-            var sDay = sqlDateArr2[0];
-            var sqlDateArr3 = sqlDateArr2[1].split(":");
-            //format of sqlDateArr3[] = ['hh','mm','ss.ms']
-            var sHour = sqlDateArr3[0];
-            var sMinute = sqlDateArr3[1];
-            var sqlDateArr4 = sqlDateArr3[2].split(".");
-            //format of sqlDateArr4[] = ['ss','ms']
-            var sSecond = sqlDateArr4[0];
-            var sMillisecond = sqlDateArr4[1];
-            
-            return new Date(sYear,sMonth,sDay,sHour,sMinute,sSecond,sMillisecond);
+            var a=sqlstring.split("T");
+            var d=a[0].split("-");
+            var t=a[1].slice(0, -1).split(":");
+            return new Date(d[0],(d[1]-1),d[2],t[0],t[1],t[2]);
         }
     </script>
 </body>
