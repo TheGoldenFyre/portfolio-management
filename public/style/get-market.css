@@ -1,0 +1,16 @@
+.timespan-select {
+    display: flex;
+    flex-direction: row;
+}
+
+.ts-button {
+    margin: 25px 12px;
+    border-radius: 5px;
+    padding: 5px 6px;
+    color: slategray;
+}
+
+.ts-button-selected {
+    background-color: #1b5e20;
+    color: white;
+}

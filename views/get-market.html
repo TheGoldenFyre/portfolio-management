@@ -5,75 +5,23 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Get data</title>
+
+    <link rel="stylesheet" href="../public/style/get-market.css">
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@svgdotjs/svg.js@3.0/dist/svg.min.js"></script>
 </head>
 <body>
-    <div>
-        <div onclick="HandleButton(this)" class="button button-selected">~</div>
-        <div onclick="HandleButton(this)" class="button">H</div>
-        <div onclick="HandleButton(this)" class="button">D</div>
-        <div onclick="HandleButton(this)" class="button">W</div>
-        <div onclick="HandleButton(this)" class="button">M</div>
+    <div id="maingraph"></div>
+
+    <div class="timespan-select">
+        <div onclick="HandleButton(this)" class="ts-button ts-button-selected">~</div>
+        <div onclick="HandleButton(this)" class="ts-button">H</div>
+        <div onclick="HandleButton(this)" class="ts-button">D</div>
+        <div onclick="HandleButton(this)" class="ts-button">W</div>
+        <div onclick="HandleButton(this)" class="ts-button">M</div>
     </div>
 
-    <script>
-        var draw = SVG().addTo('body').size(300, 300)
-        
-        var rect = draw.rect(100, 100).attr({ fill: '#f06' })
-
-
-        function HandleButton(obj) {
-            let res = 1, start = "", end = "";
-
-            switch(obj.firstChild.textContent) {
-                case '~': {
-                    res = 1;
-                    end = new Date()
-                    start = new Date(end.valueOf() - 15 * 60000)
-                    break;
-                }
-                case 'H': {
-                    res = 4;
-                    end = new Date()
-                    start = new Date(end.valueOf() - 60 * 60000)
-                    break;
-                }
-                case 'D': {
-                    res = 60;
-                    end = new Date()
-                    start = new Date(end.valueOf() - 24 * 60 * 60000)
-                    break;
-                }
-                case 'W': {
-                    res = 450;
-                    end = new Date()
-                    start = new Date(end.valueOf() - 7 * 24 * 60 * 60000)
-                    break;
-                }
-                case 'M': {
-                    res = 1500;
-                    end = new Date()
-                    start = new Date(end.valueOf() - 30 * 24 * 60 * 60000)
-                    break;
-                }
-            }
-
-            $.getJSON(`http://portfolio.plopfyre.studio/market/ADA-EUR?res=${res}&start=${start.toDBString()}&end=${end.toDBString()}`, (data) => {
-                console.log(DateFromSQLString(data.data[0].DataTime))
-            })
-        }
-        
-        Date.prototype.toDBString = function() {
-            return this.toISOString().slice(0, 19).replace('T', ' ')
-        }
-
-        function DateFromSQLString (sqlstring){
-            var a=sqlstring.split("T");
-            var d=a[0].split("-");
-            var t=a[1].slice(0, -1).split(":");
-            return new Date(d[0],(d[1]-1),d[2],t[0],t[1],t[2]);
-        }
-    </script>
+    <script src="../public/script/get-market.js"></script>
 </body>
 </html>
