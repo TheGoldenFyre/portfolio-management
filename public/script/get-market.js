@@ -1,6 +1,11 @@
-let draw = SVG().addTo('#maingraph').size(300, 300)
+let draw = SVG().addTo('#maingraph')
+    .size(window.innerWidth * 0.9, window.innerHeight * 0.5)
+
+let currentGraphData = []
 
 function UpdateGraph(target, data) {
+    data = data ?? currentGraphData
+
     $(target.node).empty()
 
     let ds = ""
@@ -50,7 +55,7 @@ function UpdateGraph(target, data) {
     let pEndFilled = ScalePoint({x: dims.xmin, y: dims.ymin}, dims)
     dfs += `${pEndFilled.x},${pEndFilled.y} `
 
-    var linear = draw.gradient('linear', function(add) {
+    var linear = target.gradient('linear', function(add) {
         add.stop(0, '#3b8040')
         add.stop(1, '#FFF')
       }).from(0,0).to(0,1)
@@ -61,6 +66,8 @@ function UpdateGraph(target, data) {
     let path = target.polyline(ds)
         .stroke({ color: '#1b5e20', width: 4, linecap: 'round', linejoin: 'round'})
         .fill('none')
+
+    currentGraphData = data
 }
 
 function ScalePoint(p, dims) {
@@ -77,8 +84,6 @@ function ScalePoint(p, dims) {
     }
     return ret
 }
-
-
 
 function HandleButton(obj) {
     let res = 1, start = "", end = "";
@@ -119,11 +124,16 @@ function HandleButton(obj) {
     $('.ts-button-selected').removeClass('ts-button-selected')
     $(obj).addClass('ts-button-selected')
 
-    $.getJSON(`http://portfolio.plopfyre.studio/market/ADA-EUR?res=${res}&start=${start.toDBString()}&end=${end.toDBString()}`, (data) => {
+    $.getJSON(`http://portfolio.plopfyre.studio/market/LINK-EUR?res=${res}&start=${start.toDBString()}&end=${end.toDBString()}`, (data) => {
         console.log(data)
         UpdateGraph(draw, data.data)
     })
 }
+
+window.addEventListener('resize', () => {
+    draw.size(window.innerWidth * 0.9, window.innerHeight * 0.5)
+    UpdateGraph(draw)
+});
 
 Date.prototype.toDBString = function () {
     return this.toISOString().slice(0, 19).replace('T', ' ')
