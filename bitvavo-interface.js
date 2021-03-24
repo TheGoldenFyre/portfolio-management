@@ -25,7 +25,8 @@ function GetTick(cb) {
             let price = parseFloat(marketTick.price)
             let d = new Date().toISOString().slice(0, 19).replace('T', ' ')
             data.push({
-                name: marketTick.market,
+                type: "crypto",
+                symbol: marketTick.market.substring(0, marketTick.market.length-4),
                 time: d,
                 value: price
             })
