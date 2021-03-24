@@ -21,6 +21,8 @@ app.get('/get-market/', (req, res) => {
     res.sendFile(path.resolve('./views/get-market.html'))
 })
 
+app.get('/user/:userid/assets/' )
+
 app.get('/market/:market/', cors(), (req, res) => {
     dbi.RetrieveHistorical(req.params.market, req.query, (data) => {
         res.send(data)
