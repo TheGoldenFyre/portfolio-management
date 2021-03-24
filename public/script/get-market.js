@@ -1,12 +1,45 @@
-let draw = SVG().addTo('#maingraph')
-    .size(window.innerWidth * 0.9, window.innerHeight * 0.5)
+//The main graph is always [0]
+let activeGraphs = [
+    {
+        name: "",
+        draw: SVG().addTo('#maingraph').size(document.getElementById('maingraph').clientWidth, window.innerHeight * 0.5),
+        data: []
+    }
+]
 
-let currentGraphData = []
 
+
+function PlaceSideGraphs(graphs) {
+    for (let i = 0; i < graphs.length; i++) {
+        $('.sidemarkets').append(`
+            <div class="sidemarkets--item"> 
+                <h2>${graphs[i]}</h2>
+                <div class="sidemarkets--graph sgraph-${graphs[i]}"></div>
+            </div>
+        `)
+
+
+        activeGraphs.push({
+            name: graphs[i],
+            draw: SVG().addTo(`.sgraph-${graphs[i]}`).size(document.getElementsByClassName('sidemarkets')[0].clientWidth * 0.8, window.innerHeight * 0.15),
+            data: []
+        })
+
+        let start = new Date(new Date().valueOf() - 24 * 60 * 60000)
+        console.log(start)
+
+        $.getJSON(`http://portfolio.plopfyre.studio/market/${graphs[i]}?res=150&start=${start.toDBString()}`, (data) => {
+            UpdateGraph(i+1, data.data)
+        })
+    }
+}
+
+//Takes a target index within the activegraphs
 function UpdateGraph(target, data) {
-    data = data ?? currentGraphData
+    let t = activeGraphs[target]
+    data = data ?? t.data
 
-    $(target.node).empty()
+    $(t.draw.node).empty()
 
     let ds = ""
     let dfs = ""
@@ -20,8 +53,8 @@ function UpdateGraph(target, data) {
     dims.xmax = Math.max(...times)
     dims.ymin = Math.min(...values)
     dims.ymax = Math.max(...values)
-    dims.width = target.width()
-    dims.height = target.height()
+    dims.width = t.draw.width()
+    dims.height = t.draw.height()
 
     //Keep track of min and max price labels
     let topLabel = true, bottomLabel = true
@@ -36,16 +69,16 @@ function UpdateGraph(target, data) {
         dfs += `${p.x},${p.y} `
 
         if (data[i].Value == dims.ymax && topLabel) {
-            target.text(`€${dims.ymax}`)
+            t.draw.text(`€${dims.ymax}`)
                 .move(p.x, p.y - 20)
-                .font({ fill: '#1b5e20', family: 'Inconsolata' })
+                .font({ fill: '#ab22eb', family: 'Inconsolata' })
             
             topLabel = false
         }
         if (data[i].Value == dims.ymin && bottomLabel) {
-            target.text(`€${dims.ymin}`)
+            t.draw.text(`€${dims.ymin}`)
                 .move(p.x, p.y)
-                .font({ fill: '#1b5e20', family: 'Inconsolata' })
+                .font({ fill: '#ab22eb', family: 'Inconsolata' })
             
             bottomLabel = false
         }
@@ -55,24 +88,24 @@ function UpdateGraph(target, data) {
     let pEndFilled = ScalePoint({x: dims.xmin, y: dims.ymin}, dims)
     dfs += `${pEndFilled.x},${pEndFilled.y} `
 
-    var linear = target.gradient('linear', function(add) {
-        add.stop(0, '#3b8040')
-        add.stop(1, '#FFF')
+    var linear = t.draw.gradient('linear', function(add) {
+        add.stop(0, '#62008f')
+        add.stop(1, '#1b1b1b')
       }).from(0,0).to(0,1)
 
-    let filled = target.polygon(dfs)
+    let filled = t.draw.polygon(dfs)
         .fill(linear)
     
-    let path = target.polyline(ds)
-        .stroke({ color: '#1b5e20', width: 4, linecap: 'round', linejoin: 'round'})
+    let path = t.draw.polyline(ds)
+        .stroke({ color: '#ab22eb', width: 2, linecap: 'round', linejoin: 'round'})
         .fill('none')
 
-    currentGraphData = data
+    t.data = data
 }
 
 function ScalePoint(p, dims) {
     let vPadding = 0.08 //Specifies the percentage of the canvas at the top and bottom which is not used for the graph lines 
-    let hPadding = 0.08 //Specifies the percentage of the canvas on the sides which is not used for the graph lines
+    let hPadding = 0 //Specifies the percentage of the canvas on the sides which is not used for the graph lines
 
     let ret = { x: 0, y: 0 }
     ret.x = hPadding * dims.width + (((p.x - dims.xmin) / (dims.xmax - dims.xmin)) * (dims.width * (1 - 2 * hPadding)))
@@ -126,13 +159,18 @@ function HandleButton(obj) {
 
     $.getJSON(`http://portfolio.plopfyre.studio/market/LINK-EUR?res=${res}&start=${start.toDBString()}&end=${end.toDBString()}`, (data) => {
         console.log(data)
-        UpdateGraph(draw, data.data)
+        UpdateGraph(0, data.data)
     })
 }
 
 window.addEventListener('resize', () => {
-    draw.size(window.innerWidth * 0.9, window.innerHeight * 0.5)
-    UpdateGraph(draw)
+    activeGraphs[0].draw.size(document.getElementById('maingraph').clientWidth, window.innerHeight * 0.5)
+    UpdateGraph(0)
+
+    for (let i = 1; i < activeGraphs.length; i++) {
+        activeGraphs[i].draw.size(document.getElementsByClassName('sidemarkets')[0].clientWidth * 0.8, window.innerHeight * 0.15)
+        UpdateGraph(i)
+    }
 });
 
 Date.prototype.toDBString = function () {
@@ -145,3 +183,5 @@ function DateFromSQLString(sqlstring) {
     var t = a[1].slice(0, -1).split(":");
     return new Date(d[0], (d[1] - 1), d[2], t[0], t[1], t[2]);
 }
+
+PlaceSideGraphs(["ADA-EUR", "LINK-EUR", "BTC-EUR", "ETH-EUR"])

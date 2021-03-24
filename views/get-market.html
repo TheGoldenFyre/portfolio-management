@@ -1,31 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Get data</title>
 
-    <link rel="stylesheet" href="/style/get-market.css">
+    <link rel="stylesheet" href="../public/style/get-market.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@svgdotjs/svg.js@3.0/dist/svg.min.js"></script>
 </head>
+
 <body>
-    <div class="market-title">
-        <h1>Cardano</h1>
+    <div class="main-display">
+        <div class="market-title">
+            <h1>Cardano</h1>
+        </div>
+        <div id="maingraph"></div>
+        <div class="timespan-select-wrapper">
+            <div class="timespan-select">
+                <div onclick="HandleButton(this)" class="ts-button ts-button-selected">~</div>
+                <div onclick="HandleButton(this)" class="ts-button">H</div>
+                <div onclick="HandleButton(this)" class="ts-button">D</div>
+                <div onclick="HandleButton(this)" class="ts-button">W</div>
+                <div onclick="HandleButton(this)" class="ts-button">M</div>
+            </div>
+        </div>
+
+        <section class="investments">
+            <div class="investments--row">
+                <div class="investments--title">
+                    <span>Cardano</span>
+                    <span>ADA-EUR</span>
+                </div>
+                <div class="investments--data">
+                    <div>
+                        <span>€50.00</span>
+                    </div>
+                    <div>
+                        <span>€0.9999990</span>
+                        <span class="investments--changep">200.99%</span>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
 
-    <div id="maingraph"></div>
+    <div class="sidemarkets"></div>
 
-    <div class="timespan-select">
-        <div onclick="HandleButton(this)" class="ts-button ts-button-selected">~</div>
-        <div onclick="HandleButton(this)" class="ts-button">H</div>
-        <div onclick="HandleButton(this)" class="ts-button">D</div>
-        <div onclick="HandleButton(this)" class="ts-button">W</div>
-        <div onclick="HandleButton(this)" class="ts-button">M</div>
-    </div>
-
-    <script src="/script/get-market.js"></script>
+    <script src="../public/script/get-market.js"></script>
 </body>
+
 </html>
