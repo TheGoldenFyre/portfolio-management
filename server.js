@@ -23,14 +23,14 @@ app.get('/get-market/', (req, res) => {
 
 app.get('/user/:userid/assets/' )
 
-app.get('/market/latest/:market/', cors(), (req, res) => {
-    dbi.RetrieveLatest(req.params.market, req.query, (data) => {
+app.get('/market/:type/:symbol/latest/', cors(), (req, res) => {
+    dbi.RetrieveLatest(req.params.symbol, req.params.type, req.query, (data) => {
         res.send(data)
     })
 })
 
-app.get('/market/:market/', cors(), (req, res) => {
-    dbi.RetrieveHistorical(req.params.market, req.query, (data) => {
+app.get('/market/:type/:symbol/', cors(), (req, res) => {
+    dbi.RetrieveHistorical(req.params.symbol, req.params.type, req.query, (data) => {
         res.send(data)
     })
 })
