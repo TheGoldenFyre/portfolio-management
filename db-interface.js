@@ -33,6 +33,8 @@ function RetrieveLatest(market, options, cb) {
         (err, res) => {
             if (err) throw err;
 
+            console.log(res)
+
             latest.data = res[1]
 
             if (typeof arguments[arguments.length-1] === "function")
