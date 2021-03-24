@@ -7,8 +7,6 @@ let activeGraphs = [
     }
 ]
 
-
-
 function PlaceSideGraphs(graphs) {
     for (let i = 0; i < graphs.length; i++) {
         $('.sidemarkets').append(`
@@ -116,6 +114,14 @@ function ScalePoint(p, dims) {
         ret.y = dims.height * (1 - vPadding) - ((p.y - dims.ymin) / (dims.ymax - dims.ymin) * dims.height * (1 - 2 * vPadding))
     }
     return ret
+}
+
+function AddInvestments(investments) {
+    investements.forEach(inv => {
+        $.getJSON(`http://portfolio.plopfyre.studio/market/latest/${inv.name}`, (data) => {
+            console.log(data)
+        })
+    })
 }
 
 function HandleButton(obj) {

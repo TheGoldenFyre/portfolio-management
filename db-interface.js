@@ -21,11 +21,27 @@ function InsertHistorical(marketTick, cb) {
         })
 }
 
-//TODO: sanitize sql input
+function RetrieveLatest(market, options, cb) {
+    let latest = {market: market}
+
+    pool.query(`
+            SELECT DataTime, Value
+            FROM HistoricalData
+            WHERE MarketID = ${pool.escape(market)}
+            ORDER BY DataTime DESC LIMIT 1
+            `,
+        (err, res) => {
+            if (err) throw err;
+
+            latest.data = res[1]
+
+            if (typeof arguments[arguments.length-1] === "function")
+                arguments[arguments.length-1](latest)
+        })
+}
+
 function RetrieveHistorical(market, options, cb) {
     let hd = { market: market }
-
-    console.log(pool.escape(options.res))
 
     pool.query(`
             SET @a=-1;
@@ -48,5 +64,6 @@ function RetrieveHistorical(market, options, cb) {
 
 module.exports = {
     InsertHistorical: InsertHistorical,
-    RetrieveHistorical: RetrieveHistorical
+    RetrieveHistorical: RetrieveHistorical,
+    RetrieveLatest: RetrieveLatest
 }

@@ -23,6 +23,12 @@ app.get('/get-market/', (req, res) => {
 
 app.get('/user/:userid/assets/' )
 
+app.get('/market/latest/:market/', cors(), (req, res) => {
+    dbi.RetrieveLatest(req.params.market, req.query, (data) => {
+        res.send(data)
+    })
+})
+
 app.get('/market/:market/', cors(), (req, res) => {
     dbi.RetrieveHistorical(req.params.market, req.query, (data) => {
         res.send(data)
