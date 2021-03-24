@@ -21,6 +21,19 @@ function InsertHistorical(marketTick, cb) {
         })
 }
 
+function InsertNewMarket(market, cb) {
+    pool.query(
+        `INSERT INTO Markets
+        VALUES (${pool.escape(market.type)}, ${pool.escape(market.symbol)}, ${pool.escape(market.name)}, ${pool.escape(market.endpoint)})`,
+        (err, res) => {
+            if (err) throw err;
+
+            if (typeof cb === "function")
+                cb(market)
+        }
+    )
+}
+
 function RetrieveLatest(market, options, cb) {
     let latest = {market: market}
 
@@ -65,5 +78,6 @@ function RetrieveHistorical(market, options, cb) {
 module.exports = {
     InsertHistorical: InsertHistorical,
     RetrieveHistorical: RetrieveHistorical,
-    RetrieveLatest: RetrieveLatest
+    RetrieveLatest: RetrieveLatest,
+    InsertNewMarket: InsertNewMarket
 }
