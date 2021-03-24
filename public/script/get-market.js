@@ -117,9 +117,28 @@ function ScalePoint(p, dims) {
 }
 
 function AddInvestments(investments) {
-    investements.forEach(inv => {
-        $.getJSON(`http://portfolio.plopfyre.studio/market/latest/${inv.name}`, (data) => {
-            console.log(data)
+    investments.forEach(inv => {
+        $.getJSON(`http://portfolio.plopfyre.studio/market/latest/${inv.name}`, (latest) => {
+            let value = latest.data[0].Value * inv.amount;
+            let changep = ((value / inv.price) - 1) * 100
+
+            $('.investments').append(`
+                <div class="investments--row">
+                    <div class="investments--title">
+                        <span>${inv.name}</span>
+                        <span>${inv.name}</span>
+                    </div>
+                    <div class="investments--data">
+                        <div>
+                            <span>€${value.toFixed(2)}</span>
+                        </div>
+                        <div>
+                            <span>€${latest.data[0].Value}</span>
+                            <span class="investments--changep ${changep > 0 ? "investments--changep__pos" : "investments--changep__neg"}">${changep.toFixed(2)}%</span>
+                        </div>
+                    </div>
+                </div>
+            `)
         })
     })
 }
@@ -191,3 +210,10 @@ function DateFromSQLString(sqlstring) {
 }
 
 PlaceSideGraphs(["ADA-EUR", "LINK-EUR", "BTC-EUR", "ETH-EUR"])
+AddInvestments([
+    { name: 'STMX-EUR', amount: 324.04451626, price: 10 },
+    { name: 'BTC-EUR', amount: 0.00021392, price: 10 },   
+    { name: 'LINK-EUR', amount: 1.7244198, price: 42.9 }, 
+    { name: 'ADA-EUR', amount: 48.286679, price: 50 },
+    { name: 'LTC-EUR', amount: 0.14679571, price: 25 }
+])

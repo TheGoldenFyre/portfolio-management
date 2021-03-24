@@ -52,7 +52,18 @@ function parseBitvavo(data) {
             i--
         }
     }
-    console.log(obj);
+
+    let arr = []
+
+    for (let key in obj) {
+        arr.push({
+            name: key + "-EUR",
+            amount: obj[key].value,
+            price: obj[key].price
+        })
+    }
+
+    console.log(arr);
 }
 
 module.exports = parse

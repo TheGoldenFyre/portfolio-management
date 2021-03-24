@@ -12,7 +12,7 @@ var pool = mysql.createPool({
 function InsertHistorical(marketTick, cb) {
     pool.query(`
         INSERT INTO HistoricalData
-        VAlUES (${pool.escape(marketTick.time)}, ${pool.escape(marketTick.name)}, ${pool.escape(marketTick.value)})`,
+        VAlUES (${pool.escape(marketTick.time)}, ${pool.escape(marketTick.symbol)}, ${pool.escape(marketTick.value)}, ${pool.escape(marketTick.type)})`,
         (err, res) => {
             if (err) throw err;
 
@@ -34,13 +34,13 @@ function InsertNewMarket(market, cb) {
     )
 }
 
-function RetrieveLatest(market, options, cb) {
+function RetrieveLatest(symbol, type, options, cb) {
     let latest = {market: market}
 
     pool.query(`
             SELECT DataTime, Value
             FROM HistoricalData
-            WHERE MarketID = ${pool.escape(market)}
+            WHERE MarketType = ${pool.escape(type)} AND MarketSymbol = ${pool.escape(symbol)}
             ORDER BY DataTime DESC LIMIT 1
             `,
         (err, res) => {
@@ -53,14 +53,14 @@ function RetrieveLatest(market, options, cb) {
         })
 }
 
-function RetrieveHistorical(market, options, cb) {
+function RetrieveHistorical(symbol, type, options, cb) {
     let hd = { market: market }
 
     pool.query(`
             SET @a=-1;
             SELECT DataTime, Value
             FROM HistoricalData
-            WHERE MarketID = ${pool.escape(market)}
+            WHERE MarketType = ${pool.escape(type)} AND MarketSymbol = ${pool.escape(symbol)}
             ${options.start ? `AND DataTime >= ${pool.escape(options.start)}` : ''}
             ${options.end ? `AND DataTime <= ${pool.escape(options.end)}` : ''}
             ${options.res ? `AND (@a := @a + 1) % ${pool.escape(options.res)} = 0` : ''};
