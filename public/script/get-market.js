@@ -24,7 +24,6 @@ function PlaceSideGraphs(graphs) {
         })
 
         let start = new Date(new Date().valueOf() - 24 * 60 * 60000)
-        console.log(start)
 
         $.getJSON(`http://portfolio.plopfyre.studio/market/crypto/${graphs[i]}?res=150&start=${start.toDBString()}`, (data) => {
             UpdateGraph(i+1, data.data)
@@ -126,7 +125,7 @@ function AddInvestments(investments) {
                 <div class="investments--row">
                     <div class="investments--title">
                         <span>${latest.name}</span>
-                        <span>${inv.name}</span>
+                        <span>${latest.type.toUpperCase()}-${inv.name}</span>
                     </div>
                     <div class="investments--data">
                         <div>
@@ -183,7 +182,6 @@ function HandleButton(obj) {
     $(obj).addClass('ts-button-selected')
 
     $.getJSON(`http://portfolio.plopfyre.studio/market/crypto/ADA/?res=${res}&start=${start.toDBString()}&end=${end.toDBString()}`, (data) => {
-        console.log(data)
         UpdateGraph(0, data.data)
     })
 }
