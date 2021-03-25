@@ -6,12 +6,17 @@ const CryptoJob = schedule.scheduleJob("*/15 * * * * *", UpdateCrypto)
 
 function UpdateCrypto() {
     bi.GetTick((data) => {
-        data.forEach(marketTick => { dbi.InsertHistorical(marketTick) })
+        data.forEach(marketTick => { 
+            dbi.InsertHistorical(marketTick) 
+            io.emit('market-update', marketTick)
+        })
     })
 }
 
 let express = require('express')
 let app = express()
+let http = require('http').Server(app)
+let io = require('socket.io')(http)
 let path = require('path')
 let cors = require('cors')
 

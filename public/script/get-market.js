@@ -196,6 +196,10 @@ window.addEventListener('resize', () => {
     }
 });
 
+socket.on('market-update', (MD) => {
+    console.log(MD)
+})
+
 Date.prototype.toDBString = function () {
     return this.toISOString().slice(0, 19).replace('T', ' ')
 }
