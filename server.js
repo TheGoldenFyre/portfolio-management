@@ -40,4 +40,4 @@ app.get('/market/:type/:symbol/', cors(), (req, res) => {
     })
 })
 
-app.listen(7000, () => { console.log('Started') })
+http.listen(7000, () => { console.log('Started') })
