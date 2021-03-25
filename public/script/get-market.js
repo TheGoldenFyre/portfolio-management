@@ -1,3 +1,5 @@
+let socket = io()
+
 //The main graph is always [0]
 let activeGraphs = [
     {
