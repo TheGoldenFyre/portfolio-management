@@ -92,8 +92,6 @@ function RetrieveName(symbol, type, cb) {
         (err, res) => {
             if (err) throw err;
 
-            console.log(res)
-
             if (typeof cb === "function")
                 cb(res[0].MarketName)
     })
