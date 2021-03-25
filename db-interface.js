@@ -56,23 +56,43 @@ function RetrieveLatest(symbol, type, options, cb) {
 function RetrieveHistorical(symbol, type, options, cb) {
     let hd = { symbol: symbol, type: type }
 
+    RetrieveName(symbol, type, (name) => {
+        hd.name = name
+
+        pool.query(`
+                SET @a=-1;
+                SELECT DataTime, Value
+                FROM HistoricalData
+                WHERE MarketType = ${pool.escape(type)} AND MarketSymbol = ${pool.escape(symbol)}
+                ${options.start ? `AND DataTime >= ${pool.escape(options.start)}` : ''}
+                ${options.end ? `AND DataTime <= ${pool.escape(options.end)}` : ''}
+                ${options.res ? `AND (@a := @a + 1) % ${pool.escape(options.res)} = 0` : ''};
+                `,
+            (err, res) => {
+                if (err) throw err;
+    
+                hd.data = res[1]
+    
+                if (typeof cb === "function")
+                    cb(hd)
+            })
+    })
+}
+
+function RetrieveName(symbol, type, cb) {
     pool.query(`
-            SET @a=-1;
-            SELECT DataTime, Value
-            FROM HistoricalData
-            WHERE MarketType = ${pool.escape(type)} AND MarketSymbol = ${pool.escape(symbol)}
-            ${options.start ? `AND DataTime >= ${pool.escape(options.start)}` : ''}
-            ${options.end ? `AND DataTime <= ${pool.escape(options.end)}` : ''}
-            ${options.res ? `AND (@a := @a + 1) % ${pool.escape(options.res)} = 0` : ''};
+            SELECT MarketName
+            FROM Markets
+            WHERE MarketType=${pool.escape(type)} AND MarketSymbol=${pool.escape(symbol)};
             `,
         (err, res) => {
             if (err) throw err;
 
-            hd.data = res[1]
+            console.log(res)
 
             if (typeof cb === "function")
-                cb(hd)
-        })
+                cb(res.MarketName)
+    })
 }
 
 module.exports = {
