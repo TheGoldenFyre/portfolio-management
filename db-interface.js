@@ -54,7 +54,7 @@ function RetrieveLatest(symbol, type, options, cb) {
 }
 
 function RetrieveHistorical(symbol, type, options, cb) {
-    let hd = { market: market }
+    let hd = { symbol: symbol, type: type }
 
     pool.query(`
             SET @a=-1;
