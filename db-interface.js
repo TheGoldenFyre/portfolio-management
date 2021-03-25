@@ -91,7 +91,7 @@ function RetrieveName(symbol, type, cb) {
             console.log(res)
 
             if (typeof cb === "function")
-                cb(res.MarketName)
+                cb(res[0].MarketName)
     })
 }
 
