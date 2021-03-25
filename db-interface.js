@@ -37,20 +37,24 @@ function InsertNewMarket(market, cb) {
 function RetrieveLatest(symbol, type, options, cb) {
     let latest = {symbol: symbol, type: type}
 
-    pool.query(`
-            SELECT DataTime, Value
-            FROM HistoricalData
-            WHERE MarketType = ${pool.escape(type)} AND MarketSymbol = ${pool.escape(symbol)}
-            ORDER BY DataTime DESC LIMIT 1
-            `,
-        (err, res) => {
-            if (err) throw err;
+    RetrieveName(symbol, type, (name) => {
+        latest.name = name
 
-            latest.data = res
+        pool.query(`
+                SELECT DataTime, Value
+                FROM HistoricalData
+                WHERE MarketType = ${pool.escape(type)} AND MarketSymbol = ${pool.escape(symbol)}
+                ORDER BY DataTime DESC LIMIT 1
+                `,
+            (err, res) => {
+                if (err) throw err;
 
-            if (typeof arguments[arguments.length-1] === "function")
-                arguments[arguments.length-1](latest)
-        })
+                latest.data = res
+
+                if (typeof arguments[arguments.length-1] === "function")
+                    arguments[arguments.length-1](latest)
+            })
+    })
 }
 
 function RetrieveHistorical(symbol, type, options, cb) {
