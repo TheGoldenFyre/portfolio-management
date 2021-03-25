@@ -125,7 +125,7 @@ function AddInvestments(investments) {
             $('.investments').append(`
                 <div class="investments--row">
                     <div class="investments--title">
-                        <span>${inv.name}</span>
+                        <span>${latest.name}</span>
                         <span>${inv.name}</span>
                     </div>
                     <div class="investments--data">
