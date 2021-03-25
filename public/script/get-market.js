@@ -26,7 +26,7 @@ function PlaceSideGraphs(graphs) {
         let start = new Date(new Date().valueOf() - 24 * 60 * 60000)
         console.log(start)
 
-        $.getJSON(`http://portfolio.plopfyre.studio/market/${graphs[i]}?res=150&start=${start.toDBString()}`, (data) => {
+        $.getJSON(`http://portfolio.plopfyre.studio/market/crypto/${graphs[i]}?res=150&start=${start.toDBString()}`, (data) => {
             UpdateGraph(i+1, data.data)
         })
     }
@@ -118,7 +118,7 @@ function ScalePoint(p, dims) {
 
 function AddInvestments(investments) {
     investments.forEach(inv => {
-        $.getJSON(`http://portfolio.plopfyre.studio/market/latest/${inv.name}`, (latest) => {
+        $.getJSON(`http://portfolio.plopfyre.studio/market/crypto/${inv.name}/latest`, (latest) => {
             let value = latest.data[0].Value * inv.amount;
             let changep = ((value / inv.price) - 1) * 100
 
@@ -182,7 +182,7 @@ function HandleButton(obj) {
     $('.ts-button-selected').removeClass('ts-button-selected')
     $(obj).addClass('ts-button-selected')
 
-    $.getJSON(`http://portfolio.plopfyre.studio/market/LINK-EUR?res=${res}&start=${start.toDBString()}&end=${end.toDBString()}`, (data) => {
+    $.getJSON(`http://portfolio.plopfyre.studio/market/crypto/ADA/?res=${res}&start=${start.toDBString()}&end=${end.toDBString()}`, (data) => {
         console.log(data)
         UpdateGraph(0, data.data)
     })
@@ -209,11 +209,11 @@ function DateFromSQLString(sqlstring) {
     return new Date(d[0], (d[1] - 1), d[2], t[0], t[1], t[2]);
 }
 
-PlaceSideGraphs(["ADA-EUR", "LINK-EUR", "BTC-EUR", "ETH-EUR"])
+PlaceSideGraphs(["ADA", "LINK", "BTC", "ETH"])
 AddInvestments([
-    { name: 'STMX-EUR', amount: 324.04451626, price: 10 },
-    { name: 'BTC-EUR', amount: 0.00021392, price: 10 },   
-    { name: 'LINK-EUR', amount: 1.7244198, price: 42.9 }, 
-    { name: 'ADA-EUR', amount: 48.286679, price: 50 },
-    { name: 'LTC-EUR', amount: 0.14679571, price: 25 }
+    { name: 'STMX', amount: 324.04451626, price: 10 },
+    { name: 'BTC', amount: 0.00021392, price: 10 },   
+    { name: 'LINK', amount: 1.7244198, price: 42.9 }, 
+    { name: 'ADA', amount: 48.286679, price: 50 },
+    { name: 'LTC', amount: 0.14679571, price: 25 }
 ])

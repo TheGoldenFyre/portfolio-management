@@ -35,7 +35,7 @@ function InsertNewMarket(market, cb) {
 }
 
 function RetrieveLatest(symbol, type, options, cb) {
-    let latest = {market: market}
+    let latest = {symbol: symbol, type: type}
 
     pool.query(`
             SELECT DataTime, Value
