@@ -341,8 +341,7 @@ if (window.FileList && window.File && window.FileReader) {
 function ReadFile(file) {
     const reader = new FileReader();
     reader.addEventListener('load', event => {
-        document.getElementsByTagName("h1")[0].innerHTML = event.target.result
-        console.log(event.target.result.replace(/\\"|"/g, '').split("\n"))
+        console.log(event.target.result)       
     });
     reader.readAsText(file);
 }
