@@ -234,7 +234,7 @@ socket.on('market-update', (mu) => {
         if (e.type === mu.type && e.symbol === mu.symbol)
             investmentsToUpdate.push(i)
     })
-    activeInvestments.forEach(i => {
+    investmentsToUpdate.forEach(i => {
         let ai = activeInvestments[i]
 
         let value = mu.value * ai.amount
