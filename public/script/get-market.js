@@ -1,3 +1,5 @@
+const e = require("cors")
+
 let socket = io()
 
 //The main graph is always [0]
@@ -198,8 +200,18 @@ window.addEventListener('resize', () => {
     }
 });
 
-socket.on('market-update', (MD) => {
-    console.log(MD)
+socket.on('market-update', (mu) => {
+    //First, handle the updating of the graphs
+    let graphsToUpdate = []
+    activeGraphs.forEach((e, i) => {
+        if (e.MarketType === mu.type && e.MarketSymbol === mu.symbol)
+            graphsToUpdate.push[i]
+    })
+    
+    graphsToUpdate.forEach(i => {
+        activeGraphs[i].data.push({Value: mu.value, DataTime: mu.time.replace(" ", "T")})
+        UpdateGraph(i)
+    })
 })
 
 Date.prototype.toDBString = function () {
