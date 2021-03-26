@@ -206,7 +206,7 @@ socket.on('market-update', (mu) => {
     //First, handle the updating of the graphs
     let graphsToUpdate = []
     activeGraphs.forEach((e, i) => {
-        if (e.MarketType === mu.type && e.MarketSymbol === mu.symbol)
+        if (e.type === mu.type && e.symbol === mu.symbol)
             graphsToUpdate.push[i]
     })
     
