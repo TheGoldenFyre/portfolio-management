@@ -347,9 +347,9 @@ if (window.FileList && window.File && window.FileReader) {
 function ReadFile(file) {
     const reader = new FileReader();
     reader.addEventListener('load', event => {
-        console.log(event.target.result)
-        $(".main-display").first().css("overflow-y", "scroll") 
-        console.log(parse(event.target.result, "bitvavo"))     
+        $(".main-display").first().css("overflow-y", "scroll")
+        $("#drag-area").remove()
+        AddInvestments(parse(event.target.result, "bitvavo"))
     });
     reader.readAsText(file);
 }
