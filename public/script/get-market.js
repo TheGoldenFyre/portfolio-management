@@ -10,6 +10,8 @@ let activeGraphs = [
     }
 ]
 
+let activeInvestments = []
+
 function PlaceSideGraphs(graphs) {
     for (let i = 0; i < graphs.length; i++) {
         $('.sidemarkets').append(`
@@ -122,11 +124,19 @@ function ScalePoint(p, dims) {
 function AddInvestments(investments) {
     investments.forEach(inv => {
         $.getJSON(`http://portfolio.plopfyre.studio/market/crypto/${inv.name}/latest`, (latest) => {
+            activeInvestments.push( {
+                type: latest.type,
+                symbol: latest.symbol,
+                amount: inv.amount,
+                price: inv.price,
+                name: latest.name
+            })
+
             let value = latest.data[0].Value * inv.amount;
             let changep = ((value / inv.price) - 1) * 100
 
             $('.investments').append(`
-                <div class="investments--row">
+                <div class="investments--row" id="${latest.type}-${latest.symbol}">
                     <div class="investments--title">
                         <span>${latest.name}</span>
                         <span>${latest.type.toUpperCase()}-${inv.name}</span>
@@ -205,14 +215,50 @@ socket.on('market-update', (mu) => {
 
     //First, handle the updating of the graphs
     let graphsToUpdate = []
+    let wentUp = false
+
     activeGraphs.forEach((e, i) => {
-        if (e.type === mu.type && e.symbol === mu.symbol)
+        if (e.type === mu.type && e.symbol === mu.symbol) {
+            wentUp = mu.value > activeGraphs[i].data[activeGraphs[i].data.length - 1]
             graphsToUpdate.push(i)
+        }
     })
-    
     graphsToUpdate.forEach(i => {
         activeGraphs[i].data.push({Value: mu.value, DataTime: mu.time})
         UpdateGraph(i)
+    })
+
+    //then, handle the updating of investments
+    let investmentsToUpdate = []
+    activeInvestments.forEach((e, i) => {
+        if (e.type === mu.type && e.symbol === mu.symbol)
+            investmentsToUpdate.push(i)
+    })
+    activeInvestments.forEach(i => {
+        let ai = activeInvestments[i]
+
+        let value = mu.value * ai.amount
+        let changep = ((value / ai.price) - 1) * 100
+
+        $(`${ai.type}-${ai.symbol}`).append(`
+            <div class="investments--row" id="${ai.type}-${ai.symbol}">
+                <div class="investments--title">
+                    <span>${ai.name}</span>
+                    <span>${ai.type.toUpperCase()}-${ai.symbol}</span>
+                </div>
+                <div class="investments--data">
+                    <div>
+                        <span>€${value.toFixed(2)}</span>
+                    </div>
+                    <div>
+                        <span>€${mu.value}</span>
+                        <span class="investments--changep 
+                            ${changep > 0 ? "investments--changep__pos" : "investments--changep__neg"}
+                            ${wentUp > 0 ? "investments--changed__pos" : "investments--changed__neg"}">${changep.toFixed(2)}%</span>
+                    </div>
+                </div>
+            </div>
+        `)
     })
 })
 

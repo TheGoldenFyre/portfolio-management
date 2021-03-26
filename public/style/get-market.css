@@ -157,6 +157,35 @@ h2 {
     color: red;
 }
 
+.investments--changed__pos  {
+    animation: flash-update-green 1s;
+}
+
+.investments--changed__neg  {
+    animation: flash-update-red 1s;
+}
+
+
+@keyframes flash-update-green {
+    0% {
+        background: rgba(120, 189, 17, 1)
+    }
+
+    100% {
+        background: rgba(120, 189, 17, 0)
+    }
+}
+
+@keyframes flash-update-red {
+    0% {
+        background: rgba(255, 0, 0, 1)
+    }
+
+    100% {
+        background: rgba(120, 189, 17, 0)
+    }
+}
+
 @media only screen and (min-width: 600px) {
     .main-display {
         float:left;
