@@ -211,7 +211,7 @@ socket.on('market-update', (mu) => {
     })
     
     graphsToUpdate.forEach(i => {
-        activeGraphs[i].data.push({Value: mu.value, DataTime: mu.time.replace(" ", "T")})
+        activeGraphs[i].data.push({Value: mu.value, DataTime: mu.time})
         UpdateGraph(i)
     })
 })

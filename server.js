@@ -7,7 +7,8 @@ const CryptoJob = schedule.scheduleJob("*/15 * * * * *", UpdateCrypto)
 function UpdateCrypto() {
     bi.GetTick((data) => {
         data.forEach(marketTick => { 
-            dbi.InsertHistorical(marketTick) 
+            dbi.InsertHistorical(marketTick)
+            marketTick.time = marketTick.time.replace(" ", "T") + ".000z"
             io.emit('market-update', marketTick)
         })
     })
