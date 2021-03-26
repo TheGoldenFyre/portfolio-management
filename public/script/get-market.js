@@ -123,7 +123,7 @@ function ScalePoint(p, dims) {
 
 function AddInvestments(investments) {
     investments.forEach(inv => {
-        $.getJSON(`http://portfolio.plopfyre.studio/market/crypto/${inv.name}/latest`, (latest) => {
+        $.getJSON(`http://portfolio.plopfyre.studio/market/${inv.type}/${inv.symbol}/latest`, (latest) => {
             activeInvestments.push( {
                 type: latest.type,
                 symbol: latest.symbol,
@@ -139,7 +139,7 @@ function AddInvestments(investments) {
                 <div class="investments--row" id="${latest.type}-${latest.symbol}">
                     <div class="investments--title">
                         <span>${latest.name}</span>
-                        <span>${latest.type.toUpperCase()}-${inv.name}</span>
+                        <span>${latest.type.toUpperCase()}-${inv.symbol}</span>
                     </div>
                     <div class="investments--data">
                         <div>
@@ -273,10 +273,10 @@ function DateFromSQLString(sqlstring) {
 
 PlaceSideGraphs(["ADA", "LINK", "BTC", "ETH"])
 AddInvestments([
-    { name: 'STMX-EUR', amount: 324.04451626, price: 10 },
-    { name: 'BTC-EUR', amount: 0.00021392, price: 10 },   
-    { name: 'LINK-EUR', amount: 3.51615941, price: 82.9 },
-    { name: 'ADA-EUR', amount: 86.512631, price: 90 },
-    { name: 'LTC-EUR', amount: 0.31028915, price: 50 },
-    { name: 'ARK-EUR', amount: 14.199377, price: 20 }
+    { type: 'crypto', symbol: 'STMX', amount: 324.04451626, price: 10 },
+    { type: 'crypto', symbol: 'BTC', amount: 0.00021392, price: 10 },
+    { type: 'crypto', symbol: 'LINK', amount: 3.51615941, price: 82.9 },
+    { type: 'crypto', symbol: 'ADA', amount: 86.512631, price: 90 },
+    { type: 'crypto', symbol: 'LTC', amount: 0.31028915, price: 50 },
+    { type: 'crypto', symbol: 'ARK', amount: 14.199377, price: 20 }
   ])

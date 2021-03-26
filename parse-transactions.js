@@ -57,7 +57,8 @@ function parseBitvavo(data) {
 
     for (let key in obj) {
         arr.push({
-            name: key + "-EUR",
+            type: "crypto",
+            symbol: key,
             amount: obj[key].value,
             price: obj[key].price
         })
