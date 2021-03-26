@@ -1,3 +1,5 @@
+import {DateFromSQLString, DateToSQLString} from '/script/sql-date'
+
 let socket = io()
 
 //The main graph is always [0]
@@ -31,7 +33,7 @@ function PlaceSideGraphs(graphs) {
 
         let start = new Date(new Date().valueOf() - 24 * 60 * 60000)
 
-        $.getJSON(`http://portfolio.plopfyre.studio/market/crypto/${graphs[i]}?res=150&start=${start.toDBString()}`, (data) => {
+        $.getJSON(`http://portfolio.plopfyre.studio/market/crypto/${graphs[i]}?res=150&start=${DateToSQLString(start)}`, (data) => {
             UpdateGraph(i+1, data.data)
         })
     }
@@ -195,7 +197,7 @@ function HandleButton(obj) {
     $('.ts-button-selected').removeClass('ts-button-selected')
     $(obj).addClass('ts-button-selected')
 
-    $.getJSON(`http://portfolio.plopfyre.studio/market/crypto/ADA/?res=${res}&start=${start.toDBString()}&end=${end.toDBString()}`, (data) => {
+    $.getJSON(`http://portfolio.plopfyre.studio/market/crypto/ADA/?res=${res}&start=${DateToSQLString(start)}&end=${DateToSQLString(end)}`, (data) => {
         UpdateGraph(0, data.data)
     })
 }
@@ -260,23 +262,92 @@ socket.on('market-update', (mu) => {
     })
 })
 
-Date.prototype.toDBString = function () {
-    return this.toISOString().slice(0, 19).replace('T', ' ')
+
+
+function parseBitvavo(data) {
+    //Bitvavo is a csv spreadsheet, with the following data structure: 
+    //"timestamp","type","currency","amount","status","address","method","txid"
+
+    let rows = data.split("\n")
+    let obj = {}
+
+    for (let i = rows.length-1; i > 0; i--) {
+        let cells = rows[i].replace(/"/g, '').split(",")
+
+        //Deposits are ignored, as they are not seen as part of the portfolio unless they are actually invested
+        if (cells[1] === "deposit") continue
+        if (cells[1] === "trade") {
+            if (obj[cells[2]]) {
+                let p = -parseFloat(rows[i-1].replace(/"/g, '').split(",")[3])
+
+                //If a coin was sold, the new price needs to be adjusted accordingly
+                if (p < 0) {
+                    obj[cells[2]].price += obj[cells[2]].price * (parseFloat(cells[3]) / obj[cells[2]].value)
+                    console.log((parseFloat(cells[3]) / obj[cells[2]].value));
+                    console.log(obj[cells[2]].price);
+                }
+                else {
+                    obj[cells[2]].price += p
+                }
+                obj[cells[2]].value += parseFloat(cells[3])
+            }
+            else obj[cells[2]] = {
+                value: parseFloat(cells[3]),
+                price: -parseFloat(rows[i-1].replace(/"/g, '').split(",")[3])
+            }
+
+            i--
+        }
+    }
+
+    let arr = []
+
+    for (let key in obj) {
+        arr.push({
+            type: "crypto",
+            symbol: key,
+            amount: obj[key].value,
+            price: obj[key].price
+        })
+    }
+
+    return arr
 }
 
-function DateFromSQLString(sqlstring) {
-    var a = sqlstring.split("T");
-    var d = a[0].split("-");
-    var t = a[1].slice(0, -1).split(":");
-    return new Date(d[0], (d[1] - 1), d[2], t[0], t[1], t[2]);
+const dropArea = document.getElementById('drop-area');
+
+dropArea.addEventListener('dragover', (event) => {
+    event.stopPropagation();
+    event.preventDefault();
+    // Style the drag-and-drop as a "copy file" operation.
+    event.dataTransfer.dropEffect = 'copy';
+});
+
+dropArea.addEventListener('drop', (event) => {
+    event.stopPropagation();
+    event.preventDefault();
+    const fileList = event.dataTransfer.files;
+    ReadFile(fileList[0]);
+});
+
+
+if (window.FileList && window.File && window.FileReader) {
+    document.getElementById('file-selector').addEventListener('change', event => {
+        const file = event.target.files[0];
+        ReadFile(file)
+    });
 }
 
+function ReadFile(file) {
+    const reader = new FileReader();
+    reader.addEventListener('load', event => {
+        document.getElementsByTagName("h1")[0].innerHTML = event.target.result
+        console.log(event.target.result.replace(/\\"|"/g, '').split("\n"))
+    });
+    reader.readAsText(file);
+}
+
+
+
+AddInvestments()
 PlaceSideGraphs(["ADA", "LINK", "BTC", "ETH"])
-AddInvestments([
-    { type: 'crypto', symbol: 'STMX', amount: 324.04451626, price: 10 },
-    { type: 'crypto', symbol: 'BTC', amount: 0.00021392, price: 10 },
-    { type: 'crypto', symbol: 'LINK', amount: 3.51615941, price: 82.9 },
-    { type: 'crypto', symbol: 'ADA', amount: 86.512631, price: 90 },
-    { type: 'crypto', symbol: 'LTC', amount: 0.31028915, price: 50 },
-    { type: 'crypto', symbol: 'ARK', amount: 14.199377, price: 20 }
-  ])

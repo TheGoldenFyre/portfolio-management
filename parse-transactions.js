@@ -64,7 +64,7 @@ function parseBitvavo(data) {
         })
     }
 
-    console.log(arr);
+    return arr
 }
 
 module.exports = parse
