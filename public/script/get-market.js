@@ -319,6 +319,7 @@ const dropArea = document.getElementById('drop-area');
 dropArea.addEventListener('dragover', (event) => {
     event.stopPropagation();
     event.preventDefault();
+    dropArea.style.backgroundColor = "yellow";
     // Style the drag-and-drop as a "copy file" operation.
     event.dataTransfer.dropEffect = 'copy';
 });
@@ -329,6 +330,10 @@ dropArea.addEventListener('drop', (event) => {
     const fileList = event.dataTransfer.files;
     ReadFile(fileList[0]);
 });
+
+dropArea.addEventListener('mouseleave', e => {
+    dropArea.style.backgroundColor = "#1b1b1b";
+  });
 
 
 if (window.FileList && window.File && window.FileReader) {
