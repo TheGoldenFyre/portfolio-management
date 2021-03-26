@@ -211,8 +211,6 @@ window.addEventListener('resize', () => {
 });
 
 socket.on('market-update', (mu) => {
-    console.log("Update for", mu.symbol)
-
     //First, handle the updating of the graphs
     let graphsToUpdate = []
     let wentUp = false
@@ -275,9 +273,10 @@ function DateFromSQLString(sqlstring) {
 
 PlaceSideGraphs(["ADA", "LINK", "BTC", "ETH"])
 AddInvestments([
-    { name: 'STMX', amount: 324.04451626, price: 10 },
-    { name: 'BTC', amount: 0.00021392, price: 10 },   
-    { name: 'LINK', amount: 1.7244198, price: 42.9 }, 
-    { name: 'ADA', amount: 48.286679, price: 50 },
-    { name: 'LTC', amount: 0.14679571, price: 25 }
-])
+    { name: 'STMX-EUR', amount: 324.04451626, price: 10 },
+    { name: 'BTC-EUR', amount: 0.00021392, price: 10 },   
+    { name: 'LINK-EUR', amount: 3.51615941, price: 82.9 },
+    { name: 'ADA-EUR', amount: 86.512631, price: 90 },
+    { name: 'LTC-EUR', amount: 0.31028915, price: 50 },
+    { name: 'ARK-EUR', amount: 14.199377, price: 20 }
+  ])
