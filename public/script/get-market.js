@@ -199,6 +199,8 @@ window.addEventListener('resize', () => {
 });
 
 socket.on('market-update', (mu) => {
+    console.log("Update for", mu.symbol)
+
     //First, handle the updating of the graphs
     let graphsToUpdate = []
     activeGraphs.forEach((e, i) => {
