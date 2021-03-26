@@ -3,7 +3,8 @@ let socket = io()
 //The main graph is always [0]
 let activeGraphs = [
     {
-        name: "",
+        type: "crypto",
+        symbol: "ADA",
         draw: SVG().addTo('#maingraph').size(document.getElementById('maingraph').clientWidth, window.innerHeight * 0.5),
         data: []
     }
@@ -20,7 +21,8 @@ function PlaceSideGraphs(graphs) {
 
 
         activeGraphs.push({
-            name: graphs[i],
+            type: "crypto",
+            symbol: graphs[i],
             draw: SVG().addTo(`.sgraph-${graphs[i]}`).size(document.getElementsByClassName('sidemarkets')[0].clientWidth * 0.8, window.innerHeight * 0.15),
             data: []
         })
