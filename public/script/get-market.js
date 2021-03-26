@@ -348,13 +348,10 @@ function ReadFile(file) {
     const reader = new FileReader();
     reader.addEventListener('load', event => {
         $(".main-display").first().css("overflow-y", "scroll")
-        $("#drag-area").remove()
+        $("#drop-area").remove()
         AddInvestments(parse(event.target.result, "bitvavo"))
     });
     reader.readAsText(file);
 }
 
-
-
-AddInvestments()
 PlaceSideGraphs(["ADA", "LINK", "BTC", "ETH"])
