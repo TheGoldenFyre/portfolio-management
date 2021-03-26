@@ -240,7 +240,7 @@ socket.on('market-update', (mu) => {
         let value = mu.value * ai.amount
         let changep = ((value / ai.price) - 1) * 100
 
-        $(`${ai.type}-${ai.symbol}`).append(`
+        $(`#${ai.type}-${ai.symbol}`).replaceWith(`
             <div class="investments--row" id="${ai.type}-${ai.symbol}">
                 <div class="investments--title">
                     <span>${ai.name}</span>
