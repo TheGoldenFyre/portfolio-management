@@ -23,7 +23,7 @@ let cors = require('cors')
 
 app.use(express.static(path.resolve('./public')))
 
-app.get('/get-market/', (req, res) => {
+app.get('/', (req, res) => {
     res.sendFile(path.resolve('./views/get-market.html'))
 })
 
