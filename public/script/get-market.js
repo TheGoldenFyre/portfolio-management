@@ -1,5 +1,3 @@
-const e = require("cors")
-
 let socket = io()
 
 //The main graph is always [0]
