@@ -165,6 +165,9 @@ h2 {
     animation: flash-update-red 1s;
 }
 
+#drop-area {
+    height: 100vh;
+}
 
 @keyframes flash-update-green {
     0% {
