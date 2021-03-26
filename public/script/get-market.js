@@ -331,7 +331,7 @@ dropArea.addEventListener('drop', (event) => {
     ReadFile(fileList[0]);
 });
 
-dropArea.addEventListener('mouseleave', e => {
+dropArea.addEventListener('dragleave', e => {
     dropArea.style.backgroundColor = "#1b1b1b";
   });
 
