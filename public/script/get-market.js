@@ -268,7 +268,7 @@ const dropArea = document.getElementById('drop-area');
 dropArea.addEventListener('dragover', (event) => {
     event.stopPropagation();
     event.preventDefault();
-    dropArea.style.backgroundColor = "yellow";
+    dropArea.style.backgroundColor = "rgb(42, 42, 42)";
     // Style the drag-and-drop as a "copy file" operation.
     event.dataTransfer.dropEffect = 'copy';
 });
