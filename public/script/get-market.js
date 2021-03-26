@@ -1,4 +1,4 @@
-import {DateFromSQLString, DateToSQLString} from '/script/sql-date'
+import {DateFromSQLString, DateToSQLString} from '/script/sql-date.js'
 
 let socket = io()
 
