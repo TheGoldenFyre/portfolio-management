@@ -3,7 +3,8 @@ USE portfoliotracker;
 
 CREATE TABLE HistoricalData (
     DataTime DATETIME NOT NULL,
-    MarketID VARCHAR(16) NOT NULL,
+    MarketType VARCHAR(16) NOT NULL,
+    MarketSymbol VARCHAR(8) NOT NULL,
     Value FLOAT NOT NULL
 )
 

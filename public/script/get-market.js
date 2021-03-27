@@ -297,7 +297,9 @@ function ReadFile(file) {
     reader.addEventListener('load', event => {
         $(".main-display").first().css("overflow-y", "scroll")
         $("#drop-area").remove()
-        AddInvestments(parse(event.target.result, "bitvavo"))
+        let investments = parse(event.target.result, "bitvavo")
+        document.cookie = `invs=${JSON.stringify(investments)}`
+        AddInvestments(investments)
     });
     reader.readAsText(file);
 }
