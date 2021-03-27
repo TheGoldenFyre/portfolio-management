@@ -304,19 +304,25 @@ function ReadFile(file) {
     reader.readAsText(file);
 }
 
-if (document.cookie) {
-    $(".main-display").first().css("overflow-y", "scroll")
-    $("#drop-area").remove()
-
+function ReadInvestmentsFromCookie() {
+    if (!document.cookie) return
+    
     let str = ""
-
     for (let i = 0; i < document.cookie.length; i++) {
         if(document.cookie[i] != '\\'){
             str += document.cookie[i]
         }
     }
 
-    AddInvestments(JSON.parse(str.slice(5,str.length)))
+    try {
+        AddInvestments(JSON.parse(str.slice(5,str.length)))
+        $(".main-display").first().css("overflow-y", "scroll")
+        $("#drop-area").remove()
+    } catch {
+        console.log("Invalid investment cookie content")
+        return
+    }
 }
 
+ReadInvestmentsFromCookie()
 PlaceSideGraphs(["ADA", "LINK", "BTC", "ETH"])
