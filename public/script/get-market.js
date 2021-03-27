@@ -298,11 +298,25 @@ function ReadFile(file) {
         $(".main-display").first().css("overflow-y", "scroll")
         $("#drop-area").remove()
         let investments = parse(event.target.result, "bitvavo")
-        document.cookie = `invs=${JSON.stringify(investments).replace(/\\\\/g, '')}`
-        console.log(JSON.parse(document.cookie.slice(5, -1)))
+        document.cookie = `invs=${JSON.stringify(investments)}`
         AddInvestments(investments)
     });
     reader.readAsText(file);
+}
+
+if (document.cookie) {
+    $(".main-display").first().css("overflow-y", "scroll")
+    $("#drop-area").remove()
+
+    str = ""
+
+    for (let i = 0; i < document.cookie.length; i++) {
+        if(document.cookie[i] != '\\'){
+            str += document.cookie[i]
+        }
+    }
+
+    AddInvestments(JSON.parse(str.slice(5,str.length)))
 }
 
 PlaceSideGraphs(["ADA", "LINK", "BTC", "ETH"])
