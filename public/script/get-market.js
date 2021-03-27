@@ -308,7 +308,7 @@ if (document.cookie) {
     $(".main-display").first().css("overflow-y", "scroll")
     $("#drop-area").remove()
 
-    str = ""
+    let str = ""
 
     for (let i = 0; i < document.cookie.length; i++) {
         if(document.cookie[i] != '\\'){
