@@ -299,6 +299,7 @@ function ReadFile(file) {
         $("#drop-area").remove()
         let investments = parse(event.target.result, "bitvavo")
         document.cookie = `invs=${JSON.stringify(investments).replace(/\\\\/g, '')}`
+        console.log(JSON.parse(document.cookie.slice(5, -1)))
         AddInvestments(investments)
     });
     reader.readAsText(file);
