@@ -24,7 +24,7 @@ function InitializeTransactionUpload(selector, cb) {
 
 
     if (window.FileList && window.File && window.FileReader) {
-        document.getElementById(selector).addEventListener('change', event => {
+        document.querySelector(selector).addEventListener('change', event => {
             const file = event.target.files[0];
             ReadFile(file, cb)
         });
