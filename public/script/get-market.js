@@ -1,5 +1,5 @@
 import {DateFromSQLString, DateToSQLString} from '/script/sql-date.js'
-import {parse} from '/script/parse-transactions.js'
+import * as tl from '/script/transaction-loader.js'
 
 let socket = io()
 
@@ -263,66 +263,6 @@ socket.on('market-update', (mu) => {
     })
 })
 
-const dropArea = document.getElementById('drop-area');
-
-dropArea.addEventListener('dragover', (event) => {
-    event.stopPropagation();
-    event.preventDefault();
-    dropArea.style.backgroundColor = "rgb(42, 42, 42)";
-    // Style the drag-and-drop as a "copy file" operation.
-    event.dataTransfer.dropEffect = 'copy';
-});
-
-dropArea.addEventListener('drop', (event) => {
-    event.stopPropagation();
-    event.preventDefault();
-    const fileList = event.dataTransfer.files;
-    ReadFile(fileList[0]);
-});
-
-dropArea.addEventListener('dragleave', e => {
-    dropArea.style.backgroundColor = "#1b1b1b";
-  });
-
-
-if (window.FileList && window.File && window.FileReader) {
-    document.getElementById('file-selector').addEventListener('change', event => {
-        const file = event.target.files[0];
-        ReadFile(file)
-    });
-}
-
-function ReadFile(file) {
-    const reader = new FileReader();
-    reader.addEventListener('load', event => {
-        $(".main-display").first().css("overflow-y", "scroll")
-        $("#drop-area").remove()
-        let investments = parse(event.target.result, "bitvavo")
-        document.cookie = `invs=${JSON.stringify(investments)}`
-        AddInvestments(investments)
-    });
-    reader.readAsText(file);
-}
-
-function ReadInvestmentsFromCookie() {
-    if (!document.cookie) return
-    
-    let str = ""
-    for (let i = 0; i < document.cookie.length; i++) {
-        if(document.cookie[i] != '\\'){
-            str += document.cookie[i]
-        }
-    }
-
-    try {
-        AddInvestments(JSON.parse(str.slice(5,str.length)))
-        $(".main-display").first().css("overflow-y", "scroll")
-        $("#drop-area").remove()
-    } catch {
-        console.log("Invalid investment cookie content")
-        return
-    }
-}
-
-ReadInvestmentsFromCookie()
+tl.ReadInvestmentsFromCookie('.main-display', '#drop-area', (inv) => AddInvestments(inv))
+tl.InitializeTransactionUpload('#drop-area', (inv) => AddInvestments(inv))
 PlaceSideGraphs(["ADA", "LINK", "BTC", "ETH"])
