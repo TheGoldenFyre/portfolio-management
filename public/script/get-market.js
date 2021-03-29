@@ -269,5 +269,5 @@ tl.ReadInvestmentsFromCookie('.main-display', '#drop-area', (inv) => {
 })
 tl.InitializeTransactionUpload('#drop-area', (inv) => {
     AddInvestments(inv)
-    PlaceSideGraphs(activeInvestments.map(e => e.symbol))
+    PlaceSideGraphs(inv.map(e => e.symbol))
 })
