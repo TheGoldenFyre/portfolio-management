@@ -263,6 +263,11 @@ socket.on('market-update', (mu) => {
     })
 })
 
-tl.ReadInvestmentsFromCookie('.main-display', '#drop-area', (inv) => AddInvestments(inv))
-tl.InitializeTransactionUpload('#drop-area', (inv) => AddInvestments(inv))
-PlaceSideGraphs(["ADA", "LINK", "BTC", "ETH"])  
+tl.ReadInvestmentsFromCookie('.main-display', '#drop-area', (inv) => {
+    AddInvestments(inv)
+    PlaceSideGraphs(activeInvestments.map(e => e.symbol))
+})
+tl.InitializeTransactionUpload('#drop-area', (inv) => {
+    AddInvestments(inv)
+    PlaceSideGraphs(activeInvestments.map(e => e.symbol))
+})
