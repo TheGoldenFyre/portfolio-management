@@ -3,6 +3,8 @@ import {parse} from '/script/parse-transactions.js'
 function InitializeTransactionUpload(selector, cb) {
     const dropArea = document.querySelector(selector);
 
+    if (!dropArea) return
+
     dropArea.addEventListener('dragover', (event) => {
         event.stopPropagation();
         event.preventDefault();
