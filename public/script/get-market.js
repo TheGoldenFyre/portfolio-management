@@ -18,23 +18,35 @@ let activeInvestments = []
 function PlaceSideGraphs(graphs) {
     for (let i = 0; i < graphs.length; i++) {
         $('.sidemarkets').append(`
-            <div class="sidemarkets--item"> 
-                <h2>${graphs[i]}</h2>
-                <div class="sidemarkets--graph sgraph-${graphs[i]}"></div>
+            <div class="sidemarkets--item" id="scontainer-${graphs[i].type}-${graphs[i].symbol}"> 
+                <h2>${graphs[i].symbol}</h2>
+                <div class="sidemarkets--graph sgraph-${graphs[i].type}-${graphs[i].symbol}"></div>
             </div>
         `)
 
+        document.getElementById(`scontainer-${graphs[i].type}-${graphs[i].symbol}`).addEventListener('click', (eventArgs) => {
+            //First, set info for the main graph]
+            activeGraphs[0] = {
+                type: graphs[i].type,
+                symbol: graphs[i].symbol,
+                draw: $('#maingraph > svg'),
+                data: []
+            }
+
+            console.log(activeGraphs[0].draw)
+
+        })
 
         activeGraphs.push({
-            type: "crypto",
-            symbol: graphs[i],
-            draw: SVG().addTo(`.sgraph-${graphs[i]}`).size(document.getElementsByClassName('sidemarkets')[0].clientWidth * 0.8, window.innerHeight * 0.15),
+            type: graphs[i].type,
+            symbol: graphs[i].symbol,
+            draw: SVG().addTo(`.sgraph-${graphs[i].type}-${graphs[i].symbol}`).size(document.getElementsByClassName('sidemarkets')[0].clientWidth * 0.8, window.innerHeight * 0.15),
             data: []
         })
 
         let start = new Date(new Date().valueOf() - 24 * 60 * 60000)
 
-        $.getJSON(`http://portfolio.plopfyre.studio/market/crypto/${graphs[i]}?res=150&start=${DateToSQLString(start)}`, (data) => {
+        $.getJSON(`http://portfolio.plopfyre.studio/market/${graphs[i].type}/${graphs[i].symbol}?res=150&start=${DateToSQLString(start)}`, (data) => {
             UpdateGraph(i+1, data.data)
         })
     }
