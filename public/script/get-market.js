@@ -33,7 +33,7 @@ function PlaceSideGraphs(graphs) {
                 data: []
             }
 
-            document.getElementsByClassName("market-title")[0].childNodes[1].innerText = `${graphs[i].type}-${graphs[i].symbol}`
+            document.getElementsByClassName("market-title")[0].childNodes[1].innerText = `${graphs[i].type.toUpperCase()}-${graphs[i].symbol}`
 
             document.getElementsByClassName('ts-button-selected')[0].click()
         })
