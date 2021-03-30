@@ -33,8 +33,7 @@ function PlaceSideGraphs(graphs) {
                 data: []
             }
 
-            console.log(activeGraphs[0].draw)
-
+            document.getElementsByClass('ts-button-selected')[0].click()
         })
 
         activeGraphs.push({
