@@ -29,7 +29,7 @@ function PlaceSideGraphs(graphs) {
             activeGraphs[0] = {
                 type: graphs[i].type,
                 symbol: graphs[i].symbol,
-                draw: $('#maingraph > svg'),
+                draw: SVG('#maingraph > svg'),
                 data: []
             }
 
