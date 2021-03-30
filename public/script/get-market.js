@@ -210,7 +210,7 @@ window.HandleButton = (obj) => {
     $('.ts-button-selected').removeClass('ts-button-selected')
     $(obj).addClass('ts-button-selected')
 
-    $.getJSON(`http://portfolio.plopfyre.studio/market/crypto/ADA/?res=${res}&start=${DateToSQLString(start)}&end=${DateToSQLString(end)}`, (data) => {
+    $.getJSON(`http://portfolio.plopfyre.studio/market/${activeGraphs[0].type}/${activeGraphs[0].symbol}/?res=${res}&start=${DateToSQLString(start)}&end=${DateToSQLString(end)}`, (data) => {
         UpdateGraph(0, data.data)
     })
 }
