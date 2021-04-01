@@ -145,10 +145,11 @@ function AddInvestments(investments) {
                 symbol: latest.symbol,
                 amount: inv.amount,
                 price: inv.price,
-                name: latest.name
+                name: latest.name,
+                value: latest.data[0].Value * inv.amount
             })
 
-            let value = latest.data[0].Value * inv.amount;
+            let value = latest.data[0].Value * inv.amount
             let changep = ((value / inv.price) - 1) * 100
 
             $('.investments').append(`
@@ -170,6 +171,38 @@ function AddInvestments(investments) {
             `)
         })
     })
+}
+
+function UpdateTotalRow() {
+    $("#total-row").remove()
+
+    let totalValue = 0, totalPrice = 0, totalChange, totalChangeP;
+
+    activeInvestments.forEach(inv => {
+        totalValue += inv.value
+        totalPrice += inv.price
+    })
+
+    totalChange = totalValue - totalPrice
+    totalChangeP = ((totalValue / totalPrice) - 1) * 100
+
+    //Once all items have been handled, we can add a total row to the table
+    $('.investments').append(`
+                <div class="investments--row" id="total-row">
+                    <div class="investments--title">
+                        <span>Total</span>
+                    </div>
+                    <div class="investments--data">
+                        <div>
+                            <span>€${totalValue.toFixed(2)}</span>
+                        </div>
+                        <div>
+                            <span>€-</span>
+                            <span class="investments--changep ${totalChangeP > 0 ? "investments--changep__pos" : "investments--changep__neg"}">${totalChangeP.toFixed(2)}%</span>
+                        </div>
+                    </div>
+                </div>
+            `)
 }
 
 window.HandleButton = (obj) => {
@@ -274,13 +307,16 @@ socket.on('market-update', (mu) => {
             </div>
         `)
     })
+    UpdateTotalRow();
 })
 
 tl.ReadInvestmentsFromCookie('.main-display', '#drop-area', (inv) => {
     AddInvestments(inv)
     PlaceSideGraphs(inv)
+    UpdateTotalRow()
 })
 tl.InitializeTransactionUpload('#drop-area', (inv) => {
     AddInvestments(inv)
     PlaceSideGraphs(inv)
+    UpdateTotalRow()
 })
