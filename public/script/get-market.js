@@ -283,6 +283,7 @@ socket.on('market-update', (mu) => {
     })
     investmentsToUpdate.forEach(i => {
         let ai = activeInvestments[i]
+        activeInvestments[i].value = mu.value
 
         let value = mu.value * ai.amount
         let changep = ((value / ai.price) - 1) * 100
