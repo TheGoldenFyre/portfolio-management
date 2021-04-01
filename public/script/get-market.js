@@ -197,7 +197,7 @@ function UpdateTotalRow() {
                             <span>€${totalValue.toFixed(2)}</span>
                         </div>
                         <div>
-                            <span>€-</span>
+                            <span></span>
                             <span class="investments--changep ${totalChangeP > 0 ? "investments--changep__pos" : "investments--changep__neg"}">${totalChangeP.toFixed(2)}%</span>
                         </div>
                     </div>
