@@ -29,6 +29,12 @@ app.get('/', (req, res) => {
 
 app.get('/user/:userid/assets/' )
 
+app.get('/markets/', cors(), (req, res) => {
+    dbi.RetrieveMarkets((data) => {
+        res.send(data)
+    })
+})
+
 app.get('/market/:type/:symbol/latest/', cors(), (req, res) => {
     dbi.RetrieveLatest(req.params.symbol, req.params.type, req.query, (data) => {
         res.send(data)

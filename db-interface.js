@@ -97,9 +97,23 @@ function RetrieveName(symbol, type, cb) {
     })
 }
 
+function RetrieveMarkets(cb) {
+    pool.query(`
+        SELECT *
+        FROM Markets
+    `,
+    (err, res) => {
+        if (err) throw err;
+
+        if (typeof cb === "function")
+            cb(res)
+    })
+}
+
 module.exports = {
     InsertHistorical: InsertHistorical,
     RetrieveHistorical: RetrieveHistorical,
     RetrieveLatest: RetrieveLatest,
-    InsertNewMarket: InsertNewMarket
+    InsertNewMarket: InsertNewMarket,
+    RetrieveMarkets: RetrieveMarkets
 }
