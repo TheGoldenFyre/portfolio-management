@@ -10,6 +10,7 @@ var pool = mysql.createPool({
 
 //Handles the insertion of historical data into the database
 function InsertHistorical(marketTick, cb) {
+    if (isNaN(marketTick.value)) marketTick.value = 0
     pool.query(`
         INSERT INTO HistoricalData
         VAlUES (${pool.escape(marketTick.time)}, ${pool.escape(marketTick.symbol)}, ${pool.escape(marketTick.value)}, ${pool.escape(marketTick.type)})`,
